@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Welcome</title>
-    <link rel="stylesheet" href="./style/home.css" />
+    <link rel="stylesheet" href="/style/home.css" />
   </head>
   <body>
     <div class="search-box">
@@ -29,13 +29,13 @@
             </li>
             <% if(user) { %>
             <li>
-              <form id="myForm" action="/logout" method="post">
+              <form id="myForm" action="/auth/logout" method="post">
                 <button type="submit">Log out</button>
               </form>
             </li>
             <% } else { %>
             <li>
-              <a href="/login">Log In</a>
+              <a href="/auth/login">Log In</a>
             </li>
             <% } %>
 

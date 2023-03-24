@@ -5,7 +5,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://kit.fontawesome.com/64d58efce2.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="./style/login.css" />
+    <link rel="stylesheet" href="/style/login.css" />
     <title>Sign up Form</title>
 </head>
 
@@ -18,7 +18,7 @@
                     <p>
                         Sign In here and watch all blogs and interview experiences of various students and interect with them
                     </p>
-                    <a href="/login">
+                    <a href="/auth/login">
                         <button class="btn transparent" id="sign-up-btn">
                             Sign In
                         </button>
@@ -30,7 +30,7 @@
     </div>
     <div class="forms-container">
         <div class="signin-signup">
-            <form action="/signup" method="POST" class="sign-in-form">
+            <form action="/auth/signup" method="POST" class="sign-in-form">
                 <h2 class="title">Sign Up</h2>
                 <div class="errorMsg">
                     <% if (message) { %>

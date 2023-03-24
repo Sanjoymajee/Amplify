@@ -1,22 +1,25 @@
 const express = require("express");
 const app = express();
-const flash = require('connect-flash');
+const flash = require("connect-flash");
 require("dotenv").config();
-const path = require('path');
+const path = require("path");
 const session = require("express-session");
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
+const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const bcrypt = require("bcrypt");
 const User = require("./models/users");
 const mongoose = require("mongoose");
 const MONGODB_URI = process.env.DATABASE;
+const GOOGLE_CLIENT_ID = process.env.CLIENT_ID;
+const GOOGLE_CLIENT_SECRET = process.env.CLIENT_SECRET;
 const bodyParser = require("body-parser");
 const MongoDBStore = require("connect-mongodb-session")(session);
 const store = new MongoDBStore({
   uri: MONGODB_URI,
   collection: "sessions",
 });
-const ejs = require('ejs');
+const ejs = require("ejs");
 app.use(express.static(path.join(__dirname, "public")));
 app.set("view engine", "ejs");
 
@@ -31,7 +34,7 @@ app.use(
     secret: "mysecret",
     resave: false,
     saveUninitialized: false,
-    store: store
+    store: store,
   })
 );
 
@@ -41,14 +44,21 @@ app.use(passport.session());
 
 // Set up the local strategy for username and password authentication
 
-passport.use('login',new LocalStrategy(async (username, password, done) => {
+passport.use(
+  "login",
+  new LocalStrategy(async (username, password, done) => {
     try {
       const user = await User.findOne({ username });
+      // console.log(user)
       if (!user) {
         return done(null, false, { message: "Incorrect username" });
       }
-      const passwordMatch = bcrypt.compare(password, user.password);
-      if (passwordMatch) {
+      if (!user.password) {
+        return done(null, false, { message: "Username already taken" });
+      }
+      const passwordMatch = await bcrypt.compare(password, user.password);
+      // console.log(passwordMatch)
+      if (!passwordMatch) {
         return done(null, false, { message: "Incorrect password" });
       }
       return done(null, user);
@@ -58,25 +68,50 @@ passport.use('login',new LocalStrategy(async (username, password, done) => {
   })
 );
 
-passport.use('signup', new LocalStrategy(async (username, password, done) => {
-  try {
-      const user = await User.findOne({ username });
+// Set up the local strategy for username and password authentication
+passport.use(
+  "signup",
+  new LocalStrategy(async (username, password, done) => {
+    try {
+  const user = await User.findOne({ username });
       if (user) {
-          return done(null, false, { message: 'Username already taken' });
+        return done(null, false, { message: "Username already taken" });
       }
       const newUser = new User({ username, password });
-      newUser
-        .save()
-        .then((user) => {
-          req.login(user, (err) => {
-            if (err) console.log(err);
-            res.redirect("/");
-          });
-        })
+      newUser.save().then((user) => {
+        return done(null, user);
+      });
     } catch (err) {
       return done(err);
     }
   })
+);
+
+passport.use(
+  new GoogleStrategy(
+    {
+      clientID: GOOGLE_CLIENT_ID,
+      clientSecret: GOOGLE_CLIENT_SECRET,
+      callbackURL: "http://localhost:3000/auth/google/callback",
+      passReqToCallback: true,
+    },
+    async (request, accessToken, refreshToken, profile, done) => {
+      const user = await User.findOneAndUpdate(
+        { googleId: profile.id }, // Search query
+        {
+          $setOnInsert: {
+            // Update or insert if not exists
+            displayName: profile.displayName,
+            googleId: profile.id,
+            email: profile.emails[0].value,
+            username: profile.emails[0].value.split("@")[0], // making username the part before the @ in the email
+          },
+        },
+        { upsert: true, new: true, setDefaultsOnInsert: true } // Options to return the new document if it doesn't exist
+      );
+      return done(null, user); 
+    }
+  )
 );
 
 // ensureAuthenticated middleware
@@ -84,87 +119,73 @@ function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {
     return next();
   }
-  res.redirect("/login");
+  res.redirect("/auth/login");
 }
 
-// chechUsername middleware
-// function checkUsername(req, res, next) {
-//   const { username } = req.body;
-
-//   User.findOne({ username }, (err, user) => {
-//     if (err) return next(err);
-//     if (user) {
-//       req.flash('error', 'Username is already taken');
-//       return res.redirect('/login');
-//     }
-//     next();
-//   });
-// }
-
-
 // Set up routes
-app.get('/',(req,res) => {
-  console.log(req.user)
-  res.redirect('/home');
-})
-
-app.get('/home', (req, res) => {
-  console.log(req.user)
-  res.render('home',{user : req.user});
+app.get("/", (req, res) => {
+  res.redirect("/home");
 });
 
-// app.get("/dashboard",ensureAuthenticated,(req,res) => {
-//   //console.log(req.user);
-//   res.send("Welcome User");
-// })
+app.get("/home", (req, res) => {
+  // console.log(req.user);
+  res.render("home", { user: req.user });
+});
 
-app.get("/login",(req, res) => {
-  const errorMessage = req.flash('error')[0];
+app.get("/auth/login", (req, res) => {
+  const errorMessage = req.flash("error")[0];
   // console.log(errorMessage)
-  res.render('login',{message : errorMessage});
+  res.render("login", { message: errorMessage });
 });
 
-app.get("/signup", (req, res) => {
-  const errorMessage = req.flash('error')[0];
+app.get("/auth/signup", (req, res) => {
+  const errorMessage = req.flash("error")[0];
   // console.log(errorMessage)
-  res.render('signup',{message : errorMessage});
+  res.render("signup", { message: errorMessage });
 });
 
-// app.post("/signup",checkUsername, (req, res, next) => {
-//   const { username, password } = req.body;
-//   const newUser = new User({ username, password });
-//   newUser
-//     .save()
-//     .then((user) => {
-//       req.login(user, (err) => {
-//         if (err) console.log(err);
-//         res.redirect("/");
-//       });
-//     })
-//     .catch((err) => console.log(err));
-// });
+// Google Oauth GET route
+app.get(
+  "/auth/google",
+  passport.authenticate("google", { scope: ["profile", "email"] })
+);
+// Google Oauth callback route
+app.get(
+  "/auth/google/callback",
+  passport.authenticate("google", {
+    successRedirect: "/",
+    failureRedirect: "/auth/login",
+  })
+);
 
 // Sign up route using Passport and failureFlash option
-app.post('/signup', passport.authenticate('signup', {
-  successRedirect: '/',
-  failureRedirect: '/signup',
-  failureFlash: true
-}));
+app.post(
+  "/auth/signup",
+  passport.authenticate("signup", {
+    successRedirect: "/",
+    failureRedirect: "/auth/signup",
+    failureFlash: true,
+  })
+);
 
-app.post('/login', passport.authenticate('login', {
-  successRedirect: '/',
-  failureRedirect: '/login',
-  failureFlash: true
-}));
+app.post(
+  "/auth/login",
+  passport.authenticate("login", {
+    successRedirect: "/",
+    failureRedirect: "/auth/login",
+    failureFlash: true,
+  })
+);
 
-app.post('/logout', function(req, res, next) {
-  req.logout(function(err) {
-    if (err) { return next(err); }
+app.post("/auth/logout", function (req, res, next) {
+  req.logout(function (err) {
+    if (err) {
+      return next(err);
+    }
     //console.log(req.user);
-    res.redirect('/');
+    res.redirect("/");
   });
 });
-
 
 // Serialize and deserialize user object
 passport.serializeUser((user, done) => {
