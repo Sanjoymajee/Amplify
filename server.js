@@ -16,8 +16,11 @@ const store = new MongoDBStore({
   collection: "sessions",
 });
 
-app.use(express.static(path.join(__dirname, "public"))); // Set up static files
+const homeRouter = require("./routes/home");
+const authRouter = require("./routes/auth");
+
 app.set("view engine", "ejs"); // Set up EJS as the view engine
+app.use(express.static(path.join(__dirname, "public"))); // Set up static files
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 app.use(flash()); // Set up flash messages
@@ -37,65 +40,9 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // Set up routes
-app.get("/", (req, res) => {
-  res.redirect("/home");
-});
+app.use(homeRouter);
 
-app.get("/home", (req, res) => {
-  res.render("home", { user: req.user });
-});
-
-app.get("/auth/login", (req, res) => {
-  const errorMessage = req.flash("error")[0];
-  res.render("login", { message: errorMessage });
-});
-
-app.get("/auth/signup", (req, res) => {
-  const errorMessage = req.flash("error")[0];
-  res.render("signup", { message: errorMessage });
-});
-
-// Google Oauth GET route
-app.get(
-  "/auth/google",
-  passport.authenticate("google", { scope: ["profile", "email"] })
-);
-// Google Oauth callback route
-app.get(
-  "/auth/google/callback",
-  passport.authenticate("google", {
-    successRedirect: "/",
-    failureRedirect: "/auth/login",
-  })
-);
-
-// Sign up route using Passport and failureFlash option
-app.post(
-  "/auth/signup",
-  passport.authenticate("signup", {
-    successRedirect: "/",
-    failureRedirect: "/auth/signup",
-    failureFlash: true,
-  })
-);
-
-app.post(
-  "/auth/login",
-  passport.authenticate("login", {
-    successRedirect: "/",
-    failureRedirect: "/auth/login",
-    failureFlash: true,
-  })
-);
-
-app.post("/auth/logout", function (req, res, next) {
-  req.logout(function (err) {
-    if (err) {
-      return next(err);
-    }
-    res.redirect("/");
-  });
-});
+app.use(authRouter);
 
 mongoose
   .connect(MONGODB_URI, {
