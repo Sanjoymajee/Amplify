@@ -159,7 +159,7 @@ p {
 body,
 input {
   /* font-family: "Poppins", sans-serif; */
-  font-family: var(--ff-secondary);
+  font-family: var(--ff-primary);
   background: var(--clr-grey-10);
   color: var(--clr-grey-1);
   line-height: 1.5;
@@ -171,10 +171,25 @@ a {
   color: white;
 }
 
+.nav-container {
+  display: flex;
+}
+
+nav .logo {
+  font-family: "Poppins", sans-serif;
+  font-style: normal;
+  font-weight: 800;
+  font-size: 64px;
+  color: #1a1a2e;
+  position: sticky;
+  z-index: 100;
+  padding: 0 0 0 20px;
+}
+
 .container {
   position: relative;
   width: 100%;
-  background-color: var(--clr-grey-8);
+  background-color: #fea371;
   min-height: 100vh;
   overflow: hidden;
 }
@@ -249,7 +264,7 @@ form.sign-in-form {
 .input-field i {
   text-align: center;
   line-height: 55px;
-  color: #acacac;
+  color: #6a6868;
   transition: 0.5s;
   font-size: 1.1rem;
 }
@@ -261,7 +276,7 @@ form.sign-in-form {
   line-height: 1;
   font-weight: 600;
   font-size: 1.1rem;
-  color: #333;
+  color: #6a6868;
 }
 
 .input-field input::placeholder {
@@ -271,7 +286,7 @@ form.sign-in-form {
 
 .social-text {
   padding: 0.7rem 0;
-  color: #4481eb;
+  color: #EE6F28;
   font-size: 1rem;
 }
 
@@ -296,13 +311,13 @@ form.sign-in-form {
 }
 
 .social-icon:hover {
-  color: #4481eb;
-  border-color: #4481eb;
+  color: #EE6F28;
+  border-color: #EE6F28;
 }
 
 .btn {
   width: 150px;
-  background-color: #5995fd;
+  background-color: #FF8440;
   border: none;
   outline: none;
   height: 49px;
@@ -316,7 +331,7 @@ form.sign-in-form {
 }
 
 .btn:hover {
-  background-color: #4d84e2;
+  background-color: #EE6F28;
 }
 
 .panels-container {
@@ -337,7 +352,7 @@ form.sign-in-form {
   top: -10%;
   right: 48%;
   transform: translateY(-50%);
-  background-image: linear-gradient(-45deg, #4481eb 0%, #04befe 100%);
+  background-image: linear-gradient(-45deg, #EE6F28 0%, #f8945a 100%);
   transition: 1.8s ease-in-out;
   border-radius: 50%;
   z-index: 6;
