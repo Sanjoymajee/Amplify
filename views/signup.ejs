@@ -12,16 +12,8 @@
   </head>
 
   <body>
+    <%- include('partials/header') %>
     <div class="container">
-      <div class="nav-container">
-        <div class="wrapper">
-          <nav>
-            <a class="logo" href="/home">
-              D.
-            </a>
-          </nav>
-        </div>
-      </div>
       <div class="panels-container">
         <div class="panel left-panel">
           <div class="content">
@@ -41,9 +33,9 @@
     </div>
     <div class="forms-container">
       <div class="signin-signup">
-        <form action="/auth/signup" method="POST" class="sign-in-form">
+        <form action="/auth/signup" method="POST" class="sign-in-form" id="signupForm">
           <h2 class="title">Sign Up</h2>
-          <div class="errorMsg">
+          <div id="statusMessage" class="errorMsg">
             <% if (message) { %>
             <p><%= message %></p>
             <% } %>
@@ -86,7 +78,7 @@
             <a href="#" class="social-icon">
               <i class="fab fa-twitter"></i>
             </a>
-            <a href="#" class="social-icon">
+            <a href="/auth/google" class="social-icon">
               <i class="fab fa-google"></i>
             </a>
             <a href="#" class="social-icon">
@@ -96,5 +88,8 @@
         </form>
       </div>
     </div>
+    <%- include('partials/footer') %>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/userExist.js"></script>
   </body>
 </html>

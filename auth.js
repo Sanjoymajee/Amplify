@@ -13,16 +13,13 @@ passport.use(
     try {
       const user = await User.findOne({ username });
       // console.log(user)
-      if (!user) {
-        return done(null, false, { message: "Incorrect username" });
-      }
-      if (!user.password) {
-        return done(null, false, { message: "Username already taken" });
+      if (!user || !user.password) {
+        return done(null, false, { message: "Incorrect username or password" });
       }
       const passwordMatch = await bcrypt.compare(password, user.password);
       // console.log(passwordMatch)
       if (!passwordMatch) {
-        return done(null, false, { message: "Incorrect password" });
+        return done(null, false);
       }
       return done(null, user);
     } catch (err) {
@@ -38,7 +35,7 @@ passport.use(
     try {
       const user = await User.findOne({ username });
       if (user) {
-        return done(null, false, { message: "Username already taken" });
+        return done(null, false, { message: "Username already exists" });
       }
       const newUser = new User({ username, password });
       newUser.save().then((user) => {

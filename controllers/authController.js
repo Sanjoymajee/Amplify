@@ -2,12 +2,12 @@ const passport = require("passport");
 
 exports.getLogin = (req, res) => {
   const errorMessage = req.flash("error")[0];
-  res.render("login", { message: errorMessage });
+  res.render("login", { message: errorMessage,user : req.user });
 };
 
 exports.getSignup = (req, res) => {
   const errorMessage = req.flash("error")[0];
-  res.render("signup", { message: errorMessage });
+  res.render("signup", { message: errorMessage, user : req.user });
 };
 
 exports.getGoogle = passport.authenticate("google", {

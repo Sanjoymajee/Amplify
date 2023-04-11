@@ -12,21 +12,13 @@
   </head>
 
   <body>
+    <%- include('partials/header') %>
     <div class="container">
-      <div class="nav-container">
-        <div class="wrapper">
-          <nav>
-            <a class="logo" href="/home">
-              D.
-            </a>
-          </nav>
-        </div>
-      </div>
       <div class="forms-container">
         <div class="signin-signup">
           <form action="/auth/login" method="POST" class="sign-in-form">
             <h2 class="title">Sign in</h2>
-            <div class="errorMsg">
+            <div id="statusMessage" class="errorMsg">
               <% if (message) { %>
               <p><%= message %></p>
               <% } %>
@@ -86,5 +78,6 @@
         </div>
       </div>
     </div>
+    <%- include('partials/footer') %>
   </body>
 </html>

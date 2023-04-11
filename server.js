@@ -3,6 +3,8 @@ require("ejs");
 require("./auth");
 const express = require("express");
 const app = express();
+const server = require("http").createServer(app);
+const io = require("socket.io")(server);
 const flash = require("connect-flash");
 const path = require("path");
 const session = require("express-session");
@@ -18,6 +20,7 @@ const store = new MongoDBStore({
 
 const homeRouter = require("./routes/home");
 const authRouter = require("./routes/auth");
+const User = require("./models/users");
 
 app.set("view engine", "ejs"); // Set up EJS as the view engine
 app.use(express.static(path.join(__dirname, "public"))); // Set up static files
@@ -44,6 +47,14 @@ app.use(homeRouter);
 
 app.use(authRouter);
 
+io.on('connection', (socket) => {
+  socket.on('checkUsername', async (userData, callback) => {
+    const isAvailable = await User.findOne({ username : userData.username }) === null;
+    callback(isAvailable);
+  });
+});
+
+
 mongoose
   .connect(MONGODB_URI, {
     useNewUrlParser: true,
@@ -54,6 +65,6 @@ mongoose
   });
 
 // Start server
-app.listen(3000, () => {
+server.listen(3000, () => {
   console.log("Server started on port 3000");
 });
