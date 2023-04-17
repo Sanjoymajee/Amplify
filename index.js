@@ -13,6 +13,7 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const MONGODB_URI = process.env.DATABASE;
 const SESSION_SECRET = process.env.SESSION_SECRET;
+const PORT = process.env.PORT || 8888;
 const MongoDBStore = require("connect-mongodb-session")(session);
 const store = new MongoDBStore({
   uri: MONGODB_URI,
@@ -66,6 +67,6 @@ mongoose
   });
 
 // Start server
-server.listen(3000, () => {
+server.listen(PORT, () => {
   console.log("Server started on port 3000");
 });
