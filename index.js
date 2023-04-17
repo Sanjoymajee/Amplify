@@ -32,7 +32,7 @@ app.use(flash()); // Set up flash messages
 // Set up session middleware
 app.use(
   session({
-    secret: SESSION_SECRET,
+    secret: "mysecret",
     resave: false,
     saveUninitialized: false,
     store: store,
