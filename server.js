@@ -12,6 +12,7 @@ const passport = require("passport");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const MONGODB_URI = process.env.DATABASE;
+const SESSION_SECRET = process.env.SESSION_SECRET;
 const MongoDBStore = require("connect-mongodb-session")(session);
 const store = new MongoDBStore({
   uri: MONGODB_URI,
@@ -31,7 +32,7 @@ app.use(flash()); // Set up flash messages
 // Set up session middleware
 app.use(
   session({
-    secret: "mysecret",
+    secret: SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     store: store,
