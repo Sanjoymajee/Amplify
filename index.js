@@ -33,7 +33,7 @@ app.use(flash()); // Set up flash messages
 // Set up session middleware
 app.use(
   session({
-    secret: "mysecret",
+    secret: SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     store: store,
@@ -49,24 +49,30 @@ app.use(homeRouter);
 
 app.use(authRouter);
 
-io.on('connection', (socket) => {
-  socket.on('checkUsername', async (userData, callback) => {
-    const isAvailable = await User.findOne({ username : userData.username }) === null;
+io.on("connection", (socket) => {
+  socket.on("checkUsername", async (userData, callback) => {
+    const isAvailable =
+      (await User.findOne({ username: userData.username })) === null;
     callback(isAvailable);
   });
 });
 
-
-mongoose
-  .connect(MONGODB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then(() => {
-    console.log("connected to dB");
-  });
+const connectDB = async () => {
+  try {
+    const conn = await mongoose.connect(MONGODB_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+    console.log(`MongoDB Connected: ${conn.connection.host}`);
+  } catch (error) {
+    console.log(error);
+    process.exit(1);
+  }
+};
 
 // Start server
-server.listen(PORT, () => {
-  console.log("Server started on port 3000");
+connectDB().then(() => {
+  server.listen(PORT, () => {
+    console.log("listening for requests");
+  });
 });
