@@ -19,13 +19,11 @@
       <div class="wrapper">
         <header>
           <div class="hero-content">
-            <h1>Hi, I’m Sanjoy</h1>
-            <p>
-              I am a nodejs backend developer @CelebalTech,I also love 3D modelling and animation
-            </p>
-            <a href="#">
-              Contact Me
-            </a>
+            <% if(user) {%>
+              <h1>Welcome, <%= user.username %></h1>
+            <%} else {%>
+              <h1>Welcome, to our website</h1>
+            <%}%>
           </div>
         </header>
       </div>

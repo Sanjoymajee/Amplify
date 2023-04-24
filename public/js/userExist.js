@@ -40,6 +40,7 @@ usernameInput.addEventListener("input", () => {
       "checkUsername",
       { username: usernameInput.value },
       (result) => {
+        console.log(result);
         // Update the status text based on the result
         if (result) {
           statusMessage.textContent = "Username is available!";

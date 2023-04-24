@@ -23,6 +23,40 @@ const UserSchema = new Schema({
     type: String,
     default: null,
   },
+  friends: {
+    type: [
+      {
+        userId: {
+          type: Schema.Types.ObjectId,
+          ref: "User",
+          required: true,
+        },
+        username: {
+          type: String,
+          required: true,
+        },
+        email: {
+          type: String,
+        },
+      },
+    ],
+  },
+  friendRequests: {
+    type: [
+      {
+        userId: {
+          type: Schema.Types.ObjectId,
+          ref: "User",
+          required: true,
+        },
+        username: {
+          type: String,
+          required: true,
+        },
+      },
+    ],
+    default: [],
+  },
 });
 
 UserSchema.pre("save", async function (next) {
