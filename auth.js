@@ -29,30 +29,68 @@ passport.use(
 );
 
 // Set up the local strategy for username and password authentication
+// passport.use(
+//   "signup",
+//   new LocalStrategy(async (username, password, done) => {
+//     try {
+//       const user = await User.findOne({ username });
+//       if (user) {
+//         return done(null, false, { message: "Username already exists" });
+//       }
+//       const newUser = new User({ username, password });
+//       newUser.save().then((user) => {
+//         return done(null, user);
+//       });
+//     } catch (err) {
+//       return done(err);
+//     }
+//   })
+// );
+
 passport.use(
   "signup",
-  new LocalStrategy(async (username, password, done) => {
-    try {
-      const user = await User.findOne({ username });
-      if (user) {
-        return done(null, false, { message: "Username already exists" });
+  new LocalStrategy(
+    {
+      usernameField: "username",
+      passwordField: "password",
+      passReqToCallback: true,
+    },
+    async function (req, username, password, done) {
+      try {
+        // Check if user with given username already exists
+        const user = await User.findOne({ username: username });
+
+        // If user with given username already exists, return an error message
+        if (user) {
+          return done(
+            null,
+            false,
+            { message: "Username is already taken." }
+          );
+        }
+
+        // Create a new user with given username, email, and password
+        const newUser = await User.create({
+          username: username,
+          email: req.body.email,
+          password: password,
+        });
+
+        return done(null, newUser);
+      } catch (err) {
+        return done(err);
       }
-      const newUser = new User({ username, password });
-      newUser.save().then((user) => {
-        return done(null, user);
-      });
-    } catch (err) {
-      return done(err);
     }
-  })
+  )
 );
+
 
 passport.use(
   new GoogleStrategy(
     {
       clientID: GOOGLE_CLIENT_ID,
       clientSecret: GOOGLE_CLIENT_SECRET,
-      callbackURL: "http://localhost:3000/auth/google/callback",
+      callbackURL: "/auth/google/callback",
       passReqToCallback: true,
     },
     async (request, accessToken, refreshToken, profile, done) => {
