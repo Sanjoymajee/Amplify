@@ -36,6 +36,10 @@ exports.postLogout = (req, res, next) => {
     if (err) {
       return next(err);
     }
-    res.redirect("/");
+    req.session.destroy(function(err) {
+      if(err)return next(err);
+      res.redirect('/');
+    });
+    // res.redirect("/");
   });
 };

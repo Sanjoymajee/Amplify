@@ -58,15 +58,19 @@ passport.use(
     async function (req, username, password, done) {
       try {
         // Check if user with given username already exists
-        const user = await User.findOne({ username: username });
+        const email = req.body.email;
+        const user = await User.findOne({
+          $or: [{ username }, { email }],
+        });
 
         // If user with given username already exists, return an error message
         if (user) {
-          return done(
-            null,
-            false,
-            { message: "Username is already taken." }
-          );
+          if(user.username === username){
+            return done(null, false, { message: "Username already exists" });
+          }
+          else{
+            return done(null, false, { message: "Email already exists" });
+          }
         }
 
         // Create a new user with given username, email, and password
