@@ -28,6 +28,7 @@ const chatRouter = require("./routes/chats");
 const socketConnection = require("./socket");
 
 app.set("view engine", "ejs"); // Set up EJS as the view engine
+app.set("views", path.join(__dirname, "views")); // Set up views directory
 app.use(express.static(path.join(__dirname, "public"))); // Set up static files
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
