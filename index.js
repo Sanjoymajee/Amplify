@@ -66,7 +66,7 @@ app.use((req, res, next) => {
 
 const connectDB = async () => {
   try {
-    const conn = await mongoose.connect(MONGODB_URI_LOCAL, {
+    const conn = await mongoose.connect(MONGODB_URI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
