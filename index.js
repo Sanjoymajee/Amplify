@@ -48,6 +48,10 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // Set up routes
+app.get("/", (req, res) => {
+  res.redirect("/home");
+});
+
 app.use(homeRouter);
 
 app.use(authRouter);
