@@ -4,6 +4,6 @@ const { postMessage, getMessage } = require("../controllers/chatController");
 
 router.get("/chat/:username", getMessage);
 
-router.post("/chat/:username", postMessage);
+// router.post("/chat/:username", postMessage);
 
 module.exports = router;

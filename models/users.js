@@ -25,6 +25,10 @@ const UserSchema = new Schema({
     required: true,
     unique: true,
   },
+  socketId: {
+    type: String,
+    default: null,
+  },
   friends: {
     type: [
       {
