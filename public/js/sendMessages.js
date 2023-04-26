@@ -1,9 +1,14 @@
 const socket = io();
+document.querySelector("#chatroom").scrollTop = document.querySelector("#chatroom").scrollHeight;
 const messageInput = document.querySelector("#message");
 const friendUsername = document.querySelector("#friendUsername").innerText;
 const username = document.querySelector("#username").innerText;
 const sendButton = document.querySelector("#send");
-// Add an event listener for the send button
+
+setInterval(() => {
+    socket.emit('ping', 'ping');
+}, 30000);
+
 socket.emit('chat-room',({username}));
 
 sendButton.addEventListener("click", (e) => {
@@ -17,7 +22,7 @@ sendButton.addEventListener("click", (e) => {
     }
     
     // Send the message to the server
-    socket.emit("chat-message", {message, friendUsername, username});
+    socket.emit("chat-message", {message, friendUsername});
     
     // Clear the input
     messageInput.value = "";
@@ -25,21 +30,23 @@ sendButton.addEventListener("click", (e) => {
 
 // Add an event listener for the chat-message event
 socket.on("chat-message", (message) => {
-    // console.log(message);
-    // Create a new message element
-    const newMessage = document.createElement("div");
-    newMessage.classList.add("message");
+    const newMessage_container = document.createElement("div");
+    newMessage_container.classList.add("message-container");
     if(message.sender.username === username) {
-        newMessage.classList.add("message--sent");
+        newMessage_container.classList.add("message--sent");
     }
-    else newMessage.classList.add("message--received");
-    newMessage.innerHTML = `
-        <p>${message.sender.username} : ${message.message}</p>
+    else newMessage_container.classList.add("message--received");
+    newMessage_container.innerHTML = `
+        <div class="message">
+            <p>${message.message}</p>
+            <div class="message-timestamp">
+                <p>${new Date(message.timestamp).toLocaleTimeString()}</p>
+            </div>
+        </div>
     `;
-    // document.querySelector("#noMessages").remove();
     
     // Add the new message to the DOM
-    document.querySelector("#chatroom").appendChild(newMessage);
+    document.querySelector("#chatroom").appendChild(newMessage_container);
     // go to end of chatroom
     document.querySelector("#chatroom").scrollTop = document.querySelector("#chatroom").scrollHeight;
 });

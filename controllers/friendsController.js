@@ -5,7 +5,7 @@ exports.getFriends = async (req, res) => {
   const friends = user.friends;
   const friendRequests = user.friendRequests;
   const message = req.query.message;
-  // console.log(friends);
+  console.log(friends);
   // console.log(friendRequests)
   res.render("friends", { user, friends, friendRequests, message });
 };

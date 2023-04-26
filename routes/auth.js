@@ -10,21 +10,23 @@ const {
   postLogout,
 } = require("../controllers/authController");
 
-router.get("/auth/login", getLogin);
+const {isAuth, isNotAuth} = require("../middleware/isAuthenticated");
 
-router.get("/auth/signup", getSignup);
+router.get("/auth/login",isNotAuth, getLogin);
+
+router.get("/auth/signup", isNotAuth, getSignup);
 
 // Google Oauth GET route
-router.get("/auth/google", getGoogle);
+router.get("/auth/google", isNotAuth, getGoogle);
 
 // Google Oauth callback route
-router.get("/auth/google/callback", getGoogleCallback);
+router.get("/auth/google/callback", isNotAuth, getGoogleCallback);
 
 // Sign up route using Passport and failureFlash option
-router.post("/auth/signup", postSignup);
+router.post("/auth/signup", isNotAuth, postSignup);
 
-router.post("/auth/login", postLogin);
+router.post("/auth/login", isNotAuth, postLogin);
 
-router.post("/auth/logout", postLogout);
+router.post("/auth/logout", isAuth, postLogout);
 
 module.exports = router;

@@ -28,25 +28,6 @@ passport.use(
   })
 );
 
-// Set up the local strategy for username and password authentication
-// passport.use(
-//   "signup",
-//   new LocalStrategy(async (username, password, done) => {
-//     try {
-//       const user = await User.findOne({ username });
-//       if (user) {
-//         return done(null, false, { message: "Username already exists" });
-//       }
-//       const newUser = new User({ username, password });
-//       newUser.save().then((user) => {
-//         return done(null, user);
-//       });
-//     } catch (err) {
-//       return done(err);
-//     }
-//   })
-// );
-
 passport.use(
   "signup",
   new LocalStrategy(
@@ -115,14 +96,6 @@ passport.use(
     }
   )
 );
-
-// ensureAuthenticated middleware
-function ensureAuthenticated(req, res, next) {
-  if (req.isAuthenticated()) {
-    return next();
-  }
-  res.redirect("/auth/login");
-}
 
 // Serialize and deserialize user object
 passport.serializeUser((user, done) => {

@@ -29,35 +29,3 @@ exports.getMessage = async (req, res) => {
   messages.sort((a, b) => a.timestamp - b.timestamp);
   res.render("chats", { user, friendUsername, messages });
 };
-
-// exports.postMessage = async (req, res) => {
-//   const user = req.user;
-//   const friendUsername = req.params.username;
-//   console.log(user.username);
-//   console.log(friendUsername);
-//   const message = req.body.message;
-//   // console.log(req);
-//   console.log(message);
-//   // res.send('hi')
-//   try {
-//     const friendUser = await User.findOne({ username: friendUsername });
-//     console.log(message);
-//     const newMessage = new Messages({
-//       sender: {
-//         id: user._id,
-//         username: user.username,
-//       },
-//       receiver: {
-//         id: friendUser._id,
-//         username: friendUser.username,
-//       },
-//       message,
-//     });
-//     await newMessage.save();
-//     res.redirect(`/chat/${friendUsername}`);
-//   } catch (err) {
-//     console.log(err);
-//     res.status(404).render("error.ejs");
-//     return;
-//   }
-// };

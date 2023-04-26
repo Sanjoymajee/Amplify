@@ -2,8 +2,8 @@ const promiseRouter = require("express-promise-router");
 const router = promiseRouter();
 const { postMessage, getMessage } = require("../controllers/chatController");
 
-router.get("/chat/:username", getMessage);
+const { isAuth, isNotAuth } = require("../middleware/isAuthenticated");
 
-// router.post("/chat/:username", postMessage);
+router.get("/chat/:username", isAuth, getMessage);
 
 module.exports = router;

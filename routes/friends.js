@@ -7,12 +7,14 @@ const {
   postSendFriendRequest,
 } = require("../controllers/friendsController");
 
-router.get("/friends", getFriends);
+const {isAuth, isNotAuth} = require("../middleware/isAuthenticated");
 
-router.get("/friends/add", getAddFriends);
+router.get("/friends",isAuth, getFriends);
 
-router.post("/friends/acceptRequest", postAcceptFriendRequest);
+router.get("/friends/add",isAuth, getAddFriends);
 
-router.post("/friends/sendRequest", postSendFriendRequest);
+router.post("/friends/acceptRequest",isAuth, postAcceptFriendRequest);
+
+router.post("/friends/sendRequest", isAuth, postSendFriendRequest);
 
 module.exports = router;
