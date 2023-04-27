@@ -1,10 +1,9 @@
 const socket = io();
 document.querySelector("#chatroom").scrollTop = document.querySelector("#chatroom").scrollHeight;
 const messageInput = document.querySelector("#message");
-const friendUsername = document.querySelector("#friendUsername").innerText;
-const username = document.querySelector("#username").innerText;
+const friendUsername = document.querySelector("#friendUsername").innerText.toLowerCase();
+const username = document.querySelector("#username").innerText.toLowerCase();
 const sendButton = document.querySelector("#send");
-
 setInterval(() => {
     socket.emit('ping', 'ping');
 }, 30000);

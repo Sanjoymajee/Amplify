@@ -18,7 +18,7 @@ function socketConnection(server) {
     });
 
     socket.on("ping", (data) => {
-      console.log(data);
+      // console.log(data);
     });
 
     // Handle incoming messages from clients
@@ -27,7 +27,6 @@ function socketConnection(server) {
         // Look up the sender and receiver users in your MongoDB database
         const user = await User.findOne({ socketId: socket.id });
         const friendUser = await User.findOne({ username: friendUsername });
-
         // Create a new message in your MongoDB database
         const newMessage = new Messages({
           sender: {

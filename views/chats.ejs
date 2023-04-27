@@ -7,85 +7,7 @@
       rel="stylesheet"
       href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
     />
-    <style>
-      body {
-        background-color: #12181b;
-        color: hsl(209, 28%, 39%);
-      }
-      .row {
-        margin-top: 50px;
-      }
-      .card {
-        border: 0;
-      }
-      .message-container {
-        display: flex;
-        flex-direction: row;
-        margin-bottom: 10px;
-      }
-
-      .message--sent {
-        justify-content: flex-end;
-      }
-
-      .message--received {
-        justify-content: flex-start;
-      }
-
-      .message {
-        max-width: 70%;
-        padding: 5px 10px;
-        border-radius: 10px;
-      }
-
-      .message p {
-        margin: 0;
-      }
-
-      .message--sent .message {
-        background-color: hsl(209, 61%, 8%);
-        color: hsl(208.9, 73.6%, 28.2%);
-      }
-
-      .message--received .message {
-        background-color: hsl(208.9, 73.6%, 28.2%);
-        color: hsl(208.8, 61%, 8%);
-      }
-
-      .message-timestamp p {
-        margin: 0;
-        font-size: x-small;
-      }
-      #chatroom {
-        height: 400px;
-        overflow-y: auto;
-      }
-      .card-header {
-        border: 0;
-        background-color: #081521;
-        color: hsl(209, 28%, 39%);
-      }
-      .card-body {
-        border: 0;
-        background-color: hsl(209, 61%, 16%);
-        color: hsl(209, 28%, 39%);
-      }
-      .card-footer {
-        border: 0;
-        background-color: #081521;
-        color: hsl(209, 28%, 39%);
-      }
-      .form-control {
-        border: 0;
-        background-color: hsl(209, 61%, 16%);
-        color: hsl(209, 28%, 39%);
-      }
-      input[type="text"]:focus {
-        outline: none;
-        background-color: hsl(209, 61%, 16%);
-        color: hsl(209, 55%, 66%);
-      }
-    </style>
+    <link rel="stylesheet" href="/style/chats.css" />
   </head>
   <body>
     <div class="container-fluid">
@@ -121,6 +43,15 @@
           </div>
         </div>
       </div>
+      <div class="back-btn">
+        <div class="mt-5">
+          <a href="/friends" class="btn">Back to Friends</a>
+        </div>
+        <div class="mt-5">
+          <a href="/" class="btn">Back to Home</a>
+        </div>
+      </div>
+      
     </div>
     <script src="/socket.io/socket.io.js"></script>
     <script src="/js/sendMessages.js"></script>

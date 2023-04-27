@@ -7,55 +7,7 @@
       rel="stylesheet"
       href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
     />
-
-    <!-- Custom styles -->
-    <style>
-      body {
-        background-color: #12181b;
-        color: hsl(209, 28%, 39%);
-      }
-      h1 {
-        font-family: "Roboto", sans-serif;
-        font-weight: bold;
-        text-align: center;
-        margin-top: 30px;
-      }
-      .container {
-        background-color: hsl(209, 61%, 16%);
-        border-radius: 5px;
-        margin-top: 30px;
-        padding: 30px;
-        /* transition: 0.3s; */
-      }
-      .form-group {
-        margin-bottom: 20px;
-      }
-      label {
-        color: hsl(210, 59%, 29%);
-        font-family: "Roboto", sans-serif;
-        font-size: 16px;
-        font-weight: bold;
-      }
-      p {
-        font-family: "Roboto", sans-serif;
-        font-size: 16px;
-        margin-bottom: 0;
-      }
-      .btn-back {
-        font-family: "Roboto", sans-serif;
-        font-size: 16px;
-        font-weight: bold;
-        background-color: #337ab7;
-        color: #fff;
-        border: none;
-        margin-top: 20px;
-        transition: 0.3s;
-      }
-      .btn-back:hover {
-        background-color: #286090;
-        transition: 0.3s;
-      }
-    </style>
+    <link rel="stylesheet" href="/style/profile.css" />
   </head>
   <body>
     <div class="container">
@@ -64,15 +16,24 @@
         <div class="col-md-6">
           <div class="form-group">
             <label for="username">Username:</label>
-            <p><%= user.username %></p>
+            <p><%= profileUser.username %></p>
           </div>
           <div class="form-group">
             <label for="email">Email:</label>
-            <p><%= user.email %></p>
+            <p><%= profileUser.email %></p>
           </div>
-          <button class="btn btn-back" onclick="location.href='/';">
-            Back to Home
-          </button>
+          <% if(user && user.username !== profileUser.username) { %>
+              <div class="mt-5">
+                <a href="/chat/<%= profileUser.username %>" class="btn btn-primary">Chat</a>
+              </div>
+              <form id="requestForm" method="POST" action="/friends/sendRequest">
+                <input type="hidden" name="friendUsername" value="<%= profileUser.username %>">
+                <button type="submit">Send Friend Request</button>
+              </form>
+            <% } %>
+          <div class="mt-5">
+            <a href="/" class="btn btn-primary">Back to Home</a>
+          </div>
         </div>
       </div>
     </div>

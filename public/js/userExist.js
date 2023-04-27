@@ -12,7 +12,7 @@ usernameInput.addEventListener("input", () => {
   clearTimeout(timerId);
 
   // Get the trimmed value of the input
-  const username = usernameInput.value.trim();
+  const username = usernameInput.value.trim().toLowerCase();
 
   // If the username is empty, clear the status message and return
   if (!username) {
@@ -38,9 +38,8 @@ usernameInput.addEventListener("input", () => {
     // Send a socket message to the server to check the username availability
     socket.emit(
       "checkUsername",
-      { username: usernameInput.value },
+      { username: username },
       (result) => {
-        console.log(result);
         // Update the status text based on the result
         if (result) {
           statusMessage.textContent = "Username is available!";

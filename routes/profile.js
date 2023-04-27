@@ -4,6 +4,6 @@ const {
     getUserProfile,
 } = require('../controllers/profileController');
 
-router.get('/profile/:username', getUserProfile);
+router.get('/profile/:profileUsername', getUserProfile);
 
 module.exports = router;

@@ -5,7 +5,7 @@ exports.getFriends = async (req, res) => {
   const friends = user.friends;
   const friendRequests = user.friendRequests;
   const message = req.query.message;
-  console.log(friends);
+  // console.log(friends);
   // console.log(friendRequests)
   res.render("friends", { user, friends, friendRequests, message });
 };
@@ -48,7 +48,7 @@ exports.postAcceptFriendRequest = async (req, res) => {
 };
 
 exports.postSendFriendRequest = async (req, res) => {
-  const { friendUsername } = req.body;
+  const friendUsername = req.body.friendUsername.toLowerCase();
   const user = req.user;
 
   try {

@@ -9,8 +9,9 @@ const User = require("./models/users");
 // Set up the local strategy for username and password authentication
 passport.use(
   "login",
-  new LocalStrategy(async (username, password, done) => {
+  new LocalStrategy(async (username_any, password, done) => {
     try {
+      const username = username_any.toLowerCase();
       const user = await User.findOne({ username });
       // console.log(user)
       if (!user || !user.password) {
@@ -36,10 +37,11 @@ passport.use(
       passwordField: "password",
       passReqToCallback: true,
     },
-    async function (req, username, password, done) {
+    async function (req, username_any, password, done) {
       try {
         // Check if user with given username already exists
-        const email = req.body.email;
+        const email = req.body.email.toLowerCase();
+        const username = username_any.toLowerCase();
         const user = await User.findOne({
           $or: [{ username }, { email }],
         });
@@ -57,7 +59,7 @@ passport.use(
         // Create a new user with given username, email, and password
         const newUser = await User.create({
           username: username,
-          email: req.body.email,
+          email: email,
           password: password,
         });
 
