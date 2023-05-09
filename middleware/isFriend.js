@@ -1,4 +1,9 @@
+const url = require('url');
+
 exports.isFriend = (req,res,next) => {
+    const referer = req.get('Referer');
+    const urlObject = url.parse(referer,true);
+    const urlPath = urlObject.pathname;
     if(req.user){
         const user = req.user;
         for(const friend of user.friends){
@@ -7,7 +12,7 @@ exports.isFriend = (req,res,next) => {
                 return;
             }
         }
-        res.redirect('/');
+        res.redirect(urlPath);
     }
     else{
         res.redirect('/auth/login');
