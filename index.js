@@ -14,9 +14,10 @@ const MONGODB_URI = process.env.DATABASE;
 const MONGODB_URI_LOCAL = process.env.DATABASE_LOCAL;
 const SESSION_SECRET = process.env.SESSION_SECRET;
 const PORT = process.env.PORT || 8888;
+const cors = require('cors');
 const MongoDBStore = require("connect-mongodb-session")(session);
 const store = new MongoDBStore({
-  uri: MONGODB_URI,
+  uri: MONGODB_URI_LOCAL,
   collection: "sessions",
 });
 
@@ -25,6 +26,7 @@ const authRouter = require("./routes/auth");
 const friendRouter = require("./routes/friends");
 const profileRouter = require("./routes/profile");
 const chatRouter = require("./routes/chats");
+const ajaxRouter = require("./routes/ajax");
 const socketConnection = require("./socket");
 
 app.set("view engine", "ejs"); // Set up EJS as the view engine
@@ -33,6 +35,7 @@ app.use(express.static(path.join(__dirname, "public"))); // Set up static files
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 app.use(flash()); // Set up flash messages
+app.use(cors());
 
 // Set up session middleware
 app.use(
@@ -49,9 +52,6 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // Set up routes
-app.get("/", (req, res) => {
-  res.redirect("/home");
-});
 
 app.use(homeRouter);
 
@@ -62,6 +62,8 @@ app.use(friendRouter);
 app.use(profileRouter);
 
 app.use(chatRouter);
+
+app.use(ajaxRouter);
 
 socketConnection(server);
 
