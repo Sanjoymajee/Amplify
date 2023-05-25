@@ -1,6 +1,6 @@
-const mongoose = require("mongoose");
-const bcrypt = require("bcrypt");
-const Schema = mongoose.Schema;
+const mongoose = require('mongoose')
+const bcrypt = require('bcrypt')
+const Schema = mongoose.Schema
 
 const UserSchema = new Schema({
   username: {
@@ -34,7 +34,7 @@ const UserSchema = new Schema({
       {
         userId: {
           type: Schema.Types.ObjectId,
-          ref: "User",
+          ref: 'User',
           required: true,
         },
         username: {
@@ -53,7 +53,7 @@ const UserSchema = new Schema({
       {
         userId: {
           type: Schema.Types.ObjectId,
-          ref: "User",
+          ref: 'User',
           required: true,
         },
         username: {
@@ -68,21 +68,21 @@ const UserSchema = new Schema({
     ],
     default: [],
   },
-});
+})
 
-UserSchema.pre("save", async function (next) {
+UserSchema.pre('save', async function (next) {
   try {
-    if (!this.isModified("password")) {
-      return next();
+    if (!this.isModified('password')) {
+      return next()
     }
-    const hashedPassword = await bcrypt.hash(this.password, 12);
-    this.password = hashedPassword;
-    return next();
+    const hashedPassword = await bcrypt.hash(this.password, 12)
+    this.password = hashedPassword
+    return next()
   } catch (err) {
-    return next(err);
+    return next(err)
   }
-});
+})
 
-const User = mongoose.model("User", UserSchema);
+const User = mongoose.model('User', UserSchema)
 
-module.exports = User;
+module.exports = User
