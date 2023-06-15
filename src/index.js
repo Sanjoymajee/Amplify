@@ -1,24 +1,19 @@
 const app = require('./app')
-const homeRouter = require('./routes/home.route')
-const authRouter = require('./routes/auth.route')
-const friendRouter = require('./routes/friend.route')
-const profileRouter = require('./routes/profile.route')
-const chatRouter = require('./routes/chat.route')
-const ajaxRouter = require('./routes/ajax.route')
+const authController = require('./controllers/auth.controller')
+const homeController = require('./controllers/home.controller')
+const friendController = require('./controllers/friend.controller')
+const profileController = require('./controllers/profile.controller')
+const chatController = require('./controllers/chat.controller')
+const ajaxController = require('./controllers/ajax.controller')
 
-// Set up routes
+// Set up controllers
 
-app.use(homeRouter)
-
-app.use(authRouter)
-
-app.use(friendRouter)
-
-app.use(profileRouter)
-
-app.use(chatRouter)
-
-app.use(ajaxRouter)
+app.use(homeController)
+app.use(authController)
+app.use(friendController)
+app.use(profileController)
+app.use(chatController)
+app.use(ajaxController)
 
 app.use((req, res, next) => {
   res.status(404).render('error.ejs')

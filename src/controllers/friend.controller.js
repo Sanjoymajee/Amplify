@@ -1,6 +1,10 @@
 const User = require('../models/user.model')
+const { Router } = require('express')
+const router = Router()
 
-exports.getFriends = async (req, res) => {
+const { isAuth, isNotAuth } = require('../middleware/authentication.middleware')
+
+const getFriends = async (req, res) => {
   const user = req.user
   const friends = user.friends
   const friendRequests = user.friendRequests
@@ -10,12 +14,12 @@ exports.getFriends = async (req, res) => {
   res.render('friends', { user, friends, friendRequests, message })
 }
 
-exports.getAddFriends = (req, res) => {
+const getAddFriends = (req, res) => {
   const message = req.query.message
   res.render('addFriends', { user: req.user, message })
 }
 
-exports.postAcceptFriendRequest = async (req, res) => {
+const postAcceptFriendRequest = async (req, res) => {
   const { friendId } = req.body
   const user = req.user
   //   console.log(friendId);
@@ -47,7 +51,7 @@ exports.postAcceptFriendRequest = async (req, res) => {
   }
 }
 
-exports.postSendFriendRequest = async (req, res) => {
+const postSendFriendRequest = async (req, res) => {
   const friendUsername = req.body.friendUsername.toLowerCase()
   const user = req.user
 
@@ -99,3 +103,14 @@ exports.postSendFriendRequest = async (req, res) => {
     // res.render('addFriends', { user: req.user, message: 'An error occurred while sending the friend request.' });
   }
 }
+
+router.get('/friends', isAuth, getFriends)
+
+router.get('/friends/add', isAuth, getAddFriends)
+
+router.post('/friends/acceptRequest', isAuth, postAcceptFriendRequest)
+
+router.post('/friends/sendRequest', isAuth, postSendFriendRequest)
+
+module.exports = router
+

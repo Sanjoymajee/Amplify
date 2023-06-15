@@ -18,8 +18,8 @@
         </li>
         <% if(user) { %>
         <li>
-          <form id="myForm" action="/auth/logout" method="post">
-            <button type="submit">Log out</button>
+          <form method="POST" action="/auth/logout">
+            <button class="logout-btn">Log Out</button>
           </form>
         </li>
         <% } else { %>

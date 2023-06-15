@@ -1,7 +1,12 @@
 const User = require('../models/user.model')
 const Messages = require('../models/message.model')
+const { Router } = require('express')
+const router = Router()
 
-exports.getMessage = async (req, res) => {
+const { isAuth, isNotAuth } = require('../middleware/authentication.middleware')
+const { isFriend } = require('../middleware/friend.middleware')
+
+const getMessage = async (req, res) => {
   const friendUsername = req.params.username
   const user = req.user
   if (!user) {
@@ -29,3 +34,9 @@ exports.getMessage = async (req, res) => {
   messages.sort((a, b) => a.timestamp - b.timestamp)
   res.render('chats', { user, friendUsername, messages })
 }
+
+
+router.get('/chat/:username', isAuth, isFriend, getMessage)
+
+
+module.exports = router

@@ -1,44 +1,70 @@
+const { SESSION_NAME } = require('../config/config')
 const passport = require('passport')
+const { Router } = require('express')
+const router = Router()
+const { isAuth, isNotAuth } = require('../middleware/authentication.middleware')
+const validate = require('../middleware/validation.middleware')
+const { registerSchema, loginSchema } = require('../validations/user.validation')
 
-exports.getLogin = (req, res) => {
+const getLogin = (req, res) => {
   const errorMessage = req.flash('error')[0]
   res.render('login', { message: errorMessage, user: req.user })
 }
 
-exports.getSignup = (req, res) => {
+const getSignup = (req, res) => {
   const errorMessage = req.flash('error')[0]
   res.render('signup', { message: errorMessage, user: req.user })
 }
 
-exports.getGoogle = passport.authenticate('google', {
+const getGoogle = passport.authenticate('google', {
   scope: ['profile', 'email'],
 })
 
-exports.getGoogleCallback = passport.authenticate('google', {
+const getGoogleCallback = passport.authenticate('google', {
   successRedirect: '/',
   failureRedirect: '/auth/login',
 })
 
-exports.postSignup = passport.authenticate('signup', {
+const postSignup = passport.authenticate('signup', {
   successRedirect: '/',
   failureRedirect: '/auth/signup',
   failureFlash: true,
 })
 
-exports.postLogin = passport.authenticate('login', {
+const postLogin = passport.authenticate('login', {
   successRedirect: '/',
   failureRedirect: '/auth/login',
   failureFlash: true,
 })
 
-exports.postLogout = (req, res, next) => {
+const postLogout = (req, res, next) => {
   req.logout(function (err) {
     if (err) {
       return next(err)
     }
     req.session.destroy(function (err) {
       if (err) return next(err)
+      res.clearCookie(SESSION_NAME)
       res.redirect('/')
     })
   })
 }
+
+router.get('/auth/login', isNotAuth, getLogin)
+
+router.get('/auth/signup', isNotAuth, getSignup)
+
+// Google Oauth GET route
+router.get('/auth/google', isNotAuth, getGoogle)
+
+// Google Oauth callback route
+router.get('/auth/google/callback', isNotAuth, getGoogleCallback)
+
+// Sign up route using Passport and failureFlash option
+router.post('/auth/signup', validate(registerSchema), isNotAuth, postSignup)
+
+router.post('/auth/login', validate(loginSchema), isNotAuth, postLogin)
+
+router.post('/auth/logout', isAuth, postLogout)
+
+module.exports = router

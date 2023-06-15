@@ -5,4 +5,5 @@ module.exports = {
   DATABASE_LOCAL,
   CLIENT_ID,
   CLIENT_SECRET,
+  SESSION_NAME,
 } = process.env

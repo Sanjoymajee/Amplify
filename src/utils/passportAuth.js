@@ -9,15 +9,15 @@ const User = require('../models/user.model')
 // Set up the local strategy for username and password authentication
 passport.use(
   'login',
-  new LocalStrategy(async (username_any, password, done) => {
+  new LocalStrategy(async (username, password, done) => {
     try {
-      const username = username_any.toLowerCase()
-      const user = await User.findOne({ username })
+      const email = req.body.email
+      const user = await User.findOne({ email })
       // console.log(user)
       if (!user || !user.password) {
         return done(null, false, { message: 'Incorrect username or password' })
       }
-      const passwordMatch = await bcrypt.compare(password, user.password)
+      const passwordMatch = await user.comparePassword(password)
       // console.log(passwordMatch)
       if (!passwordMatch) {
         return done(null, false)
@@ -37,18 +37,15 @@ passport.use(
       passwordField: 'password',
       passReqToCallback: true,
     },
-    async function (req, username_any, password, done) {
+    async function (req, username, password, done) {
       try {
-        // Check if user with given username already exists
-        const email = req.body.email.toLowerCase()
-        const username = username_any.toLowerCase()
-        const user = await User.findOne({
-          $or: [{ username }, { email }],
-        })
+        // Check if user with given email already exists
+        const email = req.body.email
+        const user = await User.findOne({email})
 
         // If user with given username already exists, return an error message
         if (user) {
-          if (user.username === username) {
+          if (user.email === email) {
             return done(null, false, { message: 'Username already exists' })
           } else {
             return done(null, false, { message: 'Email already exists' })
@@ -57,9 +54,9 @@ passport.use(
 
         // Create a new user with given username, email, and password
         const newUser = await User.create({
-          username: username,
-          email: email,
-          password: password,
+          email,
+          username,
+          password,
         })
 
         return done(null, newUser)
@@ -79,6 +76,7 @@ passport.use(
       passReqToCallback: true,
     },
     async (request, accessToken, refreshToken, profile, done) => {
+      const email = profile.emails[0].value
       const user = await User.findOneAndUpdate(
         { googleId: profile.id }, // Search query
         {
@@ -87,7 +85,7 @@ passport.use(
             displayName: profile.displayName,
             googleId: profile.id,
             email: profile.emails[0].value,
-            username: profile.emails[0].value.split('@')[0], // making username the part before the @ in the email
+            username: email.split('.')[0] // making username the part before the @ in the email
           },
         },
         { upsert: true, new: true, setDefaultsOnInsert: true } // Options to return the new document if it doesn't exist
