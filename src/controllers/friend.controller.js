@@ -113,4 +113,3 @@ router.post('/friends/acceptRequest', isAuth, postAcceptFriendRequest)
 router.post('/friends/sendRequest', isAuth, postSendFriendRequest)
 
 module.exports = router
-

@@ -35,8 +35,6 @@ const getMessage = async (req, res) => {
   res.render('chats', { user, friendUsername, messages })
 }
 
-
 router.get('/chat/:username', isAuth, isFriend, getMessage)
-
 
 module.exports = router

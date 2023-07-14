@@ -1,6 +1,5 @@
 const LocalStrategy = require('passport-local').Strategy
 const GoogleStrategy = require('passport-google-oauth20').Strategy
-const bcrypt = require('bcrypt')
 const GOOGLE_CLIENT_ID = process.env.CLIENT_ID
 const GOOGLE_CLIENT_SECRET = process.env.CLIENT_SECRET
 const passport = require('passport')
@@ -41,7 +40,7 @@ passport.use(
       try {
         // Check if user with given email already exists
         const email = req.body.email
-        const user = await User.findOne({email})
+        const user = await User.findOne({ email })
 
         // If user with given username already exists, return an error message
         if (user) {
@@ -85,7 +84,7 @@ passport.use(
             displayName: profile.displayName,
             googleId: profile.id,
             email: profile.emails[0].value,
-            username: email.split('.')[0] // making username the part before the @ in the email
+            username: email.split('.')[0], // making username the part before the @ in the email
           },
         },
         { upsert: true, new: true, setDefaultsOnInsert: true } // Options to return the new document if it doesn't exist

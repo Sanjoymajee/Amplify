@@ -4,7 +4,10 @@ const { Router } = require('express')
 const router = Router()
 const { isAuth, isNotAuth } = require('../middleware/authentication.middleware')
 const validate = require('../middleware/validation.middleware')
-const { registerSchema, loginSchema } = require('../validations/user.validation')
+const {
+  registerSchema,
+  loginSchema,
+} = require('../validations/user.validation')
 
 const getLogin = (req, res) => {
   const errorMessage = req.flash('error')[0]

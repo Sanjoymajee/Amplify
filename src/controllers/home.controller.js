@@ -6,7 +6,7 @@ const getHome = (req, res) => {
 }
 
 router.get('/', (req, res) => {
- res.redirect('/home')
+  res.redirect('/home')
 })
 
 router.get('/home', getHome)
