@@ -1,6 +1,6 @@
-const { SESSION_NAME } = require('../config/config')
+const { SESSION_NAME, SESSION_SECRET } = require('../config/config')
 const SESSION_OPTIONS = {
-  secret: process.env.SESSION_SECRET,
+  secret: SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
   name: SESSION_NAME,
