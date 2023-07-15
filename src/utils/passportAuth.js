@@ -8,38 +8,45 @@ const User = require('../models/user.model')
 // Set up the local strategy for username and password authentication
 passport.use(
   'login',
-  new LocalStrategy(async (username, password, done) => {
-    try {
-      const email = req.body.email
-      const user = await User.findOne({ email })
-      // console.log(user)
-      if (!user || !user.password) {
-        return done(null, false, { message: 'Incorrect username or password' })
+  new LocalStrategy(
+    {
+      usernameField: 'email',
+      passwordField: 'password',
+      passReqToCallback: true,
+    },
+    async (req, email, password, done) => {
+      try {
+        const user = await User.findOne({ email })
+        // console.log(user)
+        if (!user || !user.password) {
+          return done(null, false, {
+            message: 'Incorrect username or password',
+          })
+        }
+        const passwordMatch = await user.comparePassword(password)
+        // console.log(passwordMatch)
+        if (!passwordMatch) {
+          return done(null, false)
+        }
+        return done(null, user)
+      } catch (err) {
+        return done(err)
       }
-      const passwordMatch = await user.comparePassword(password)
-      // console.log(passwordMatch)
-      if (!passwordMatch) {
-        return done(null, false)
-      }
-      return done(null, user)
-    } catch (err) {
-      return done(err)
     }
-  })
+  )
 )
 
 passport.use(
   'signup',
   new LocalStrategy(
     {
-      usernameField: 'username',
+      usernameField: 'email',
       passwordField: 'password',
       passReqToCallback: true,
     },
-    async function (req, username, password, done) {
+    async function (req, email, password, done) {
       try {
         // Check if user with given email already exists
-        const email = req.body.email
         const user = await User.findOne({ email })
 
         // If user with given username already exists, return an error message
@@ -50,6 +57,8 @@ passport.use(
             return done(null, false, { message: 'Email already exists' })
           }
         }
+
+        const username = email.split('@')[0]
 
         // Create a new user with given username, email, and password
         const newUser = await User.create({

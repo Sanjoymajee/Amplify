@@ -1,83 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script
-      src="https://kit.fontawesome.com/64d58efce2.js"
-      crossorigin="anonymous"
-    ></script>
-    <link rel="stylesheet" href="/style/header.css" />
-    <link rel="stylesheet" href="/style/footer.css" />
-    <link rel="stylesheet" href="/style/login.css" />
+    <%- include('partials/header.ejs') %>
     <title>Sign in Form</title>
   </head>
 
   <body>
-    <%- include('partials/header') %>
-    <div class="container">
-      <div class="forms-container">
-        <div class="signin-signup">
-          <form action="/auth/login" method="POST" class="sign-in-form">
-            <h2 class="title">Sign in</h2>
-            <div id="statusMessage" class="errorMsg">
-              <% if (message) { %>
-              <p><%= message %></p>
+    <%- include('partials/navbar') %>
+    <div class="p-4">
+      <div
+        class="p-4 justify-center md:p-8 max-w-3xl rounded-xl mx-auto bg-neutral"
+      >
+        <form action="/auth/login" method="post">
+          <h1 class="text-3xl">Sign in</h1>
+          <div class="form-control w-full">
+            <label class="label">
+              <span class="label-text">Email</span>
+              <% if(message) {%>
+              <span class="label-text-alt text-error"><%= message%></span>
               <% } %>
-            </div>
-            <div class="input-field">
-              <i class="fas fa-envelope"></i>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                placeholder="Email"
-                required
-              />
-            </div>
-            <div class="input-field">
-              <i class="fas fa-lock"></i>
-              <input
-                type="password"
-                name="password"
-                placeholder="Password"
-                required
-              />
-            </div>
-            <input type="submit" value="Login" class="btn solid" />
-            <p class="social-text">Or Sign in with social platforms</p>
-            <div class="social-media">
-              <a href="#" class="social-icon">
-                <i class="fab fa-facebook-f"></i>
-              </a>
-              <a href="#" class="social-icon">
-                <i class="fab fa-twitter"></i>
-              </a>
-              <a href="/auth/google" class="social-icon">
-                <i class="fab fa-google"></i>
-              </a>
-              <a href="#" class="social-icon">
-                <i class="fab fa-linkedin-in"></i>
-              </a>
-            </div>
-          </form>
-        </div>
-      </div>
-
-      <div class="panels-container">
-        <div class="panel left-panel">
-          <div class="content">
-            <h3>New here ?</h3>
-            <p>
-              Don't miss out on all the fun! Sign up now to unlock a world of
-              exciting possibilities and be the first to know about our latest
-              updates and promotions
-            </p>
-            <a href="/auth/signup">
-              <button class="btn transparent" id="sign-up-btn">Sign Up</button>
-            </a>
+            </label>
+            <input
+              name="email"
+              type="email"
+              placeholder="Email"
+              class="input input-bordered w-full"
+              required
+            />
           </div>
-          <img src="/svg/cea.svg" class="image" alt="" style="opacity: 0" />
+          <div class="form-control w-full">
+            <label class="label">
+              <span class="label-text">Password</span>
+            </label>
+            <input
+              name="password"
+              type="password"
+              placeholder="Password"
+              class="input input-bordered w-full"
+              required
+            />
+          </div>
+          <button type="submit" class="btn btn-base-100 w-full mt-4">
+            Sign in
+          </button>
+        </form>
+        <div class="mt-2">
+          Don't have an account?
+          <a class="text-primary" href="/auth/signup">Sign Up </a>
+          here!!!.
         </div>
       </div>
     </div>

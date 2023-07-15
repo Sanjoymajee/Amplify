@@ -1,104 +1,87 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script
-      src="https://kit.fontawesome.com/64d58efce2.js"
-      crossorigin="anonymous"
-    ></script>
-    <link rel="stylesheet" href="/style/header.css" />
-    <link rel="stylesheet" href="/style/footer.css" />
-    <link rel="stylesheet" href="/style/login.css" />
-    <script src="/js/ajax.js"></script>
-    <title>Sign up Form</title>
+    <%- include('partials/header.ejs') %>
+    <title>Sign in Form</title>
   </head>
 
   <body>
-    <%- include('partials/header') %>
-    <div class="container">
-      <div class="panels-container">
-        <div class="panel left-panel">
-          <div class="content">
-            <h3>Already have an account</h3>
-            <p>
-              Join the party! Log in to access exclusive content, personalized
-              recommendations, and connect with a community of like-minded
-              individuals
-            </p>
-            <a href="/auth/login">
-              <button class="btn transparent" id="sign-up-btn">Sign In</button>
-            </a>
-          </div>
-          <img src="/svg/cea.svg" class="image" alt="" style="opacity: 0" />
-        </div>
-      </div>
-    </div>
-    <div class="forms-container">
-      <div class="signin-signup">
-        <form
-          action="/auth/signup"
-          method="POST"
-          class="sign-in-form"
-          id="signupForm"
-        >
-          <h2 class="title">Sign Up</h2>
-          <div id="statusMessage" class="errorMsg">
-            <% if (message) { %>
-            <p><%= message %></p>
-            <% } %>
-          </div>
-          <h4 id="user"></h4>
-          <div class="input-field">
-            <i class="fas fa-envelope"></i>
+    <%- include('partials/navbar') %>
+    <div class="p-4">
+      <div class="p-4 md:p-8 max-w-3xl rounded-xl mx-auto bg-neutral">
+        <form action="/auth/signup" method="post">
+          <h1 class="text-3xl">Sign Up</h1>
+          <div class="form-control w-full">
+            <label class="label">
+              <span class="label-text">Username</span>
+              <% if(message) {%>
+              <span id="statusMessage" class="label-text-alt text-error"
+                ><%= message%></span
+              >
+              <% } %>
+            </label>
             <input
-              type="email"
-              id="email"
+              id="username"
+              name="username"
+              type="username"
+              placeholder="Username"
+              class="input input-bordered w-full"
+              required
+            />
+          </div>
+          <div class="form-control w-full">
+            <label class="label">
+              <span class="label-text">Email</span>
+            </label>
+            <input
               name="email"
+              type="email"
               placeholder="Email"
+              class="input input-bordered w-full"
               required
             />
           </div>
-          <div class="input-field">
-            <i class="fas fa-lock"></i>
+          <div class="form-control w-full">
+            <label class="label">
+              <span class="label-text">Password</span>
+              <% if(message) {%>
+              <span class="label-text-alt text-error"><%= message%></span>
+              <% } %>
+            </label>
             <input
-              type="password"
               name="password"
+              type="password"
               placeholder="Password"
+              class="input input-bordered w-full"
               required
             />
           </div>
-          <div class="input-field">
-            <i class="fas fa-unlock"></i>
+          <div class="form-control w-full">
+            <label class="label">
+              <span class="label-text">Confirm Password</span>
+              <% if(message) {%>
+              <span class="label-text-alt text-error"><%= message%></span>
+              <% } %>
+            </label>
             <input
-              type="text"
               name="confirmPassword"
-              placeholder="Confirm Password"
+              type="password"
+              placeholder="Confirm password"
+              class="input input-bordered w-full"
               required
             />
           </div>
-          <input
-            id="signUpSubmit"
-            type="submit"
-            value="Sign Up"
-            class="btn solid"
-          />
-          <p class="social-text">Or Sign up with social platforms</p>
-          <div class="social-media">
-            <a href="#" class="social-icon">
-              <i class="fab fa-facebook-f"></i>
-            </a>
-            <a href="#" class="social-icon">
-              <i class="fab fa-twitter"></i>
-            </a>
-            <a href="/auth/google" class="social-icon">
-              <i class="fab fa-google"></i>
-            </a>
-            <a href="#" class="social-icon">
-              <i class="fab fa-linkedin-in"></i>
-            </a>
-          </div>
+          <button type="submit" class="btn btn-base-100 w-full mt-4">
+            Sign Up
+          </button>
         </form>
+        <div class="mt-4">
+          <span>
+            Already have an account?
+            <a class="text-primary" href="/auth/login">Sign In </a>
+            here!!!.
+          </span>
+        </div>
       </div>
     </div>
     <%- include('partials/footer') %>

@@ -1,59 +1,77 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <%- include('partials/header.ejs') %>
     <title>My Friends</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/style/friends.css" />
   </head>
   <body>
+    <%- include('partials/navbar.ejs') %>
     <div class="container">
       <h2 class="text-center my-5">My Friends</h2>
-      
+
       <% if (friends.length > 0) { %>
-        <table class="table table-striped text-white-50">
-          <thead class="thead-dark">
-            <tr class="text-center">
-              <th>Name</th>
-              <th>Email</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% friends.forEach(function(friend) { %>
-              <tr class="text-center">
-                <td><a class="link" href="/profile/<%= friend.username %>"><%= friend.username %></a></td>
-                <td><p><%= friend.email %></p></td>
-              </tr>
-            <% }); %>
-          </tbody>
-        </table>
+      <table class="table table-striped text-white-50">
+        <thead class="thead-dark">
+          <tr class="text-center">
+            <th>Name</th>
+            <th>Email</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% friends.forEach(function(friend) { %>
+          <tr class="text-center">
+            <td>
+              <a class="link" href="/profile/<%= friend.username %>"
+                ><%= friend.username %></a
+              >
+            </td>
+            <td><p><%= friend.email %></p></td>
+          </tr>
+          <% }); %>
+        </tbody>
+      </table>
       <% } else { %>
-        <p>You don't have any friends yet.</p>
+      <p>You don't have any friends yet.</p>
       <% } %>
       <h2 class="text-center my-5">Friend Requests</h2>
       <% if (friendRequests.length > 0) { %>
-        <table class="table table-striped text-white-50">
-          <thead class="thead-dark">
-            <tr class="text-center">
-              <th>Name</th>
-              <th>Accept</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% friendRequests.forEach(function(friendRequest) { %>
-              <tr class="text-center">
-                <td><a class="link" href="/profile/<%= friendRequest.username %>"><%= friendRequest.username %></a></td>
-                <td>
-                  <form action="/friends/acceptRequest" method="POST">
-                    <input type="hidden" name="friendId" value="<%= friendRequest.userId %>">
-                    <button type="submit" class="btn btn-success" id="acceptRequestButton">Accept</button>
-                  </form>
-                </td>
-              </tr>
-            <% }); %>
-          </tbody>
-        </table>
+      <table class="table table-striped text-white-50">
+        <thead class="thead-dark">
+          <tr class="text-center">
+            <th>Name</th>
+            <th>Accept</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% friendRequests.forEach(function(friendRequest) { %>
+          <tr class="text-center">
+            <td>
+              <a class="link" href="/profile/<%= friendRequest.username %>"
+                ><%= friendRequest.username %></a
+              >
+            </td>
+            <td>
+              <form action="/friends/acceptRequest" method="POST">
+                <input
+                  type="hidden"
+                  name="friendId"
+                  value="<%= friendRequest.userId %>"
+                />
+                <button
+                  type="submit"
+                  class="btn btn-success"
+                  id="acceptRequestButton"
+                >
+                  Accept
+                </button>
+              </form>
+            </td>
+          </tr>
+          <% }); %>
+        </tbody>
+      </table>
       <% } else { %>
-        <p>You don't have any friend requests yet.</p>
+      <p>You don't have any friend requests yet.</p>
       <% } %>
       <div class="mt-5">
         <a href="/friends/add" class="btn btn-primary">Add friends</a>

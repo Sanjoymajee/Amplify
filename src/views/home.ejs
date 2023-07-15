@@ -1,32 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <script
-      src="https://kit.fontawesome.com/64d58efce2.js"
-      crossorigin="anonymous"
-    ></script>
+    <%- include('partials/header.ejs') %>
     <title>Welcome</title>
-    <link rel="stylesheet" href="/style/header.css" />
-    <link rel="stylesheet" href="/style/footer.css" />
-    <link rel="stylesheet" href="/style/home.css" />
   </head>
   <body>
-    <%- include('partials/header') %>
-    <div class="header-container">
-      <div class="wrapper">
-        <header>
-          <div class="hero-content">
-            <% if(user) {%>
-              <h1>Welcome, <%= user.username %></h1>
-            <%} else {%>
-              <h1>Welcome, to our website</h1>
-            <%}%>
-          </div>
-        </header>
-      </div>
+    <%- include('partials/navbar.ejs') %>
+    <div class="p-4">
+      <h1 class="text-3xl">Welcome to the home page</h1>
     </div>
     <%- include('partials/footer') %>
   </body>

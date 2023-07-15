@@ -10,12 +10,12 @@ const {
 } = require('../validations/user.validation')
 
 const getLogin = (req, res) => {
-  const errorMessage = req.flash('error')[0]
+  const errorMessage = req.flash('error')
   res.render('login', { message: errorMessage, user: req.user })
 }
 
 const getSignup = (req, res) => {
-  const errorMessage = req.flash('error')[0]
+  const errorMessage = req.flash('error')
   res.render('signup', { message: errorMessage, user: req.user })
 }
 
@@ -40,7 +40,8 @@ const postLogin = passport.authenticate('login', {
   failureFlash: true,
 })
 
-const postLogout = (req, res, next) => {
+const logout = (req, res, next) => {
+  console.log('logout')
   req.logout(function (err) {
     if (err) {
       return next(err)
@@ -68,6 +69,6 @@ router.post('/auth/signup', validate(registerSchema), isNotAuth, postSignup)
 
 router.post('/auth/login', validate(loginSchema), isNotAuth, postLogin)
 
-router.post('/auth/logout', isAuth, postLogout)
+router.get('/auth/logout', isAuth, logout)
 
 module.exports = router

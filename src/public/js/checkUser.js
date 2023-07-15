@@ -1,6 +1,22 @@
+const ajax = (url, successCallback, errorCallBack) => {
+  const xhr = new XMLHttpRequest()
+  xhr.onreadystatechange = () => {
+    if (xhr.readyState === 4) {
+      if (xhr.status === 200) {
+        const response = JSON.parse(xhr.responseText)
+        successCallback(response)
+      } else {
+        errorCallBack(xhr.statusText)
+      }
+    }
+  }
+  xhr.open('GET', url)
+  xhr.send()
+}
+const errorColor = '#f87272'
 const usernameInput = document.querySelector('#username')
 const statusMessage = document.querySelector('#statusMessage')
-let timerId
+let timerId = ''
 
 usernameInput.addEventListener('input', () => {
   clearTimeout(timerId)
@@ -15,17 +31,15 @@ usernameInput.addEventListener('input', () => {
     if (username.length < 3 || username.length > 20) {
       statusMessage.textContent =
         'Username must be between 3 and 20 characters long.'
-      statusMessage.style.color = '#f00'
+      statusMessage.style.color = errorColor
       return
     }
     statusMessage.textContent =
       'Username can only contain letters, numbers and underscores.'
-    statusMessage.style.color = '#f00'
+    statusMessage.style.color = errorColor
     return
   }
-  console.log(username)
   const url = '/check-username?username=' + username
-  console.log(url)
   timerId = setTimeout(() => {
     ajax(url, (response) => {
       if (response.available) {
@@ -33,7 +47,7 @@ usernameInput.addEventListener('input', () => {
         statusMessage.style.color = 'green'
       } else {
         statusMessage.textContent = 'Username already exists.'
-        statusMessage.style.color = '#f00'
+        statusMessage.style.color = errorColor
       }
     })
   }, 500)

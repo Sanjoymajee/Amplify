@@ -13,3 +13,5 @@ const ajax = (url, successCallback, errorCallBack) => {
   xhr.open('GET', url)
   xhr.send()
 }
+
+module.exports = ajax

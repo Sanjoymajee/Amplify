@@ -1,41 +1,4 @@
-<div class="search-box">
-  <input type="text" placeholder="Search here..." />
-</div>
-
-<div class="nav-container">
-  <div class="wrapper">
-    <nav>
-      <div class="logo_container">
-        <a class="logo" href="/home"> S. </a>
-      </div>
-      <ul class="nav-items">
-        <li>
-          <a href="/home">Home</a>
-        </li>
-
-        <li>
-          <a href="/friends">Friends</a>
-        </li>
-        <% if(user) { %>
-        <li>
-          <form method="POST" action="/auth/logout">
-            <button class="logout-btn">Log Out</button>
-          </form>
-        </li>
-        <% } else { %>
-        <li>
-          <a href="/auth/login">Log In</a>
-        </li>
-        <% } %>
-
-        <li>
-          <a class="nav-btn-container" href="#">
-            <img class="search-btn" src="/images/search-icon-white.svg" alt="" />
-            <img class="close-btn" src="/images/close-icon.svg" alt="" />
-          </a>
-        </li>
-      </ul>
-    </nav>
-  </div>
-</div>
-<script src="/js/searchBar.js"></script>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+<link rel="stylesheet" href="/output.css" />
