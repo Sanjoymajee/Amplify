@@ -29,15 +29,15 @@ socket.on('chat-message', (message) => {
   if (message.sender.username === username) {
     newMessage_container.innerHTML = `
       <div class="chat chat-end">
-        <div class="chat-bubble min-w-xs chat-bubble-secondary break-words">
+        <div class="chat-bubble min-w-xs chat-bubble-primary break-words">
           <p class="max-w-[200px]">${message.message}</p>
         </div>
       </div>
     `
   } else {
     newMessage_container.innerHTML = `
-      <div class="chat chat-end">
-        <div class="chat-bubble min-w-xs chat-bubble-primary break-words">
+      <div class="chat chat-start">
+        <div class="chat-bubble min-w-xs chat-bubble-secondary break-words">
           <p class="max-w-[200px]">${message.message}</p>
         </div>
       </div>
