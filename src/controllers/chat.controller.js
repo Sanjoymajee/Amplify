@@ -7,19 +7,28 @@ const { isAuth, isNotAuth } = require('../middleware/authentication.middleware')
 const { isFriend } = require('../middleware/friend.middleware')
 
 const getMessage = async (req, res) => {
-  const friendUsername = req.params.username
+  const userId = req.params.id
   const user = req.user
   if (!user) {
-    res.status(404).render('error.ejs')
+    res
+      .status(404)
+      .render('error.ejs', { message: 'User not found', status: 404 })
     return
   }
-  if (friendUsername === user.username) {
-    res.status(404).render('error.ejs')
+  if (userId === user._id.toString()) {
+    res
+      .status(404)
+      .render('error.ejs', {
+        message: 'Cannot chat with yourself',
+        status: 404,
+      })
     return
   }
-  const friendUser = await User.findOne({ username: friendUsername })
+  const friendUser = await User.findById(userId)
   if (!friendUser) {
-    res.status(404).render('error.ejs')
+    res
+      .status(404)
+      .render('error.ejs', { message: 'Friend user not found', status: 404 })
     return
   }
   const userMessages = await Messages.find({
@@ -32,9 +41,9 @@ const getMessage = async (req, res) => {
   })
   const messages = [...userMessages, ...friendUserMessages]
   messages.sort((a, b) => a.timestamp - b.timestamp)
-  res.render('chats', { user, friendUsername, messages })
+  res.render('chats', { user, friendUser, messages })
 }
 
-router.get('/chat/:username', isAuth, isFriend, getMessage)
+router.get('/chat/:id', isAuth, isFriend, getMessage)
 
 module.exports = router

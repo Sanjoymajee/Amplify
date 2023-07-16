@@ -1,63 +1,113 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
+    <%- include('partials/header') %>
     <title>Chatroom</title>
-    <link
-      rel="stylesheet"
-      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-    />
-    <link rel="stylesheet" href="/style/chats.css" />
-    <script src="/js/ajax.js"></script>
   </head>
-  <body>
-    <div class="container-fluid">
-      <div class="row flex flex-row justify-content-center">
-        <div class="col-9">
-          <div class="card">
-            <div class="card-header">
-              <h4 id="friendUsername"><%= friendUsername %></h4>
-              <p id="username" style="display: none;"><%= user.username %></p>
-            </div>
-            <div class="card-body" id="chatroom">
-              <% for (let i = 0; i < messages.length; i++) { %>
-                <div class="message-container <%= (messages[i].sender.username === user.username) ? 'message--sent' : 'message--received' %>">
-                  <div class="message">
-                    <p><%= messages[i].message %></p>
-                    <div class="message-timestamp">
-                      <p><%= new Date(messages[i].timestamp).toLocaleTimeString() %></p>
-                    </div>
+  <body class="min-h-screen">
+    <%- include('partials/navbar') %>
+    <div
+      class="p-4 md:p-8 w-full flex flex-col gap-2 max-w-6xl mx-auto min-w-[300px]"
+    >
+      <h1 class="text-2xl font-bold">Chatroom</h1>
+      <div class="flex h-auto">
+        <div
+          class="w-1/3 bg-neutral hidden md:flex md:flex-col p-4 pr-0 rounded-l-2xl"
+        >
+          <h2 class="text-xl font-bold mb-4 pb-4 border-b-2 border-primary">
+            Friends
+          </h2>
+          <div class="flex flex-col gap-4 overflow-y-auto">
+            <% user.friends.forEach((friend) => { %>
+            <a
+              class="hover:bg-gray-500 rounded-md"
+              href="/chat/<%= friend.userId %>"
+            >
+              <div class="flex gap-4 content-center items-center p-2">
+                <div class="avatar">
+                  <div
+                    class="w-8 h-8 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2"
+                  >
+                    <img src="/images/profile-pic-placeholder.png" />
                   </div>
                 </div>
-              <% } %>
-            </div>
-            <div class="card-footer">
-              <form>
-                <div class="input-group">
-                  <input type="text" name="message" id="message" class="form-control" placeholder="Type your message..." autocomplete="off" />
-                  <div class="input-group-append">
-                    <button class="btn btn-primary" type="submit" id="send">Send</button>
-                  </div>
-                </div>
-              </form>
-            </div>
+                <h2 id="friendUsername" class="text-xl">
+                  <%= friend.username %>
+                </h2>
+                <!-- <span class="badge badge-sm badge-success"></span> -->
+              </div>
+            </a>
+            <%})%>
           </div>
         </div>
-      </div>
-      <div class="back-btn">
-        <div class="mt-5">
-          <a href="/friends" class="btn">Back to Friends</a>
+        <div
+          class="bg-neutral w-full p-4 lg:px-8 rounded-2xl md:rounded-l-none md:rounded-r-2xl"
+        >
+          <div class="flex gap-4 content-center">
+            <div class="avatar">
+              <div
+                class="w-8 h-8 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2"
+              >
+                <a href="/profile/<%= friendUser._id %>">
+                  <img src="/images/profile-pic-placeholder.png" />
+                </a>
+              </div>
+            </div>
+            <h2 id="friendUsername" class="text-xl mb-4">
+              <%= friendUser.username %>
+            </h2>
+          </div>
+          <h2 id="username" class="hidden"><%= user.username %></h2>
+          <div
+            id="chatbox"
+            class="bg-base-200 w-full min-w-[300px] overflow-y-auto rounded-2xl"
+          >
+            <div id="chatroom" class="h-96">
+              <% if(messages.length > 0) { %> <% messages.forEach((message) => {
+              %>
+
+              <div>
+                <% if(message.sender.id.toString() === user._id.toString()) { %>
+                <div class="chat chat-end">
+                  <div
+                    class="chat-bubble min-w-xs chat-bubble-primary break-words"
+                  >
+                    <p class="max-w-[200px] md:max-w-[400px]">
+                      <%= message.message %>
+                    </p>
+                  </div>
+                </div>
+                <% } else { %>
+                <div class="chat chat-start">
+                  <div
+                    class="chat-bubble min-w-xs chat-bubble-secondary break-words"
+                  >
+                    <p class="max-w-[200px] md:max-w-[400px]">
+                      <%= message.message %>
+                    </p>
+                  </div>
+                </div>
+                <% } %>
+              </div>
+              <% }) %> <% } %>
+            </div>
+          </div>
+          <form id="message-form" class="p-2 pb-0">
+            <div class="join w-full">
+              <input
+                id="message"
+                class="input input-bordered join-item w-full"
+                placeholder="Write here"
+              />
+              <button id="send" class="btn join-item rounded-r-full">
+                Send
+              </button>
+            </div>
+          </form>
         </div>
-        <div class="mt-5">
-          <a href="/" class="btn">Back to Home</a>
-        </div>
       </div>
-      
     </div>
     <script src="/socket.io/socket.io.js"></script>
     <script src="/js/sendMessages.js"></script>
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
   </body>
 </html>

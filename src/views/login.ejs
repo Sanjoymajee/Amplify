@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <%- include('partials/header.ejs') %>
+    <%- include('partials/header') %>
     <title>Sign in Form</title>
   </head>
 
@@ -9,9 +9,9 @@
     <%- include('partials/navbar') %>
     <div class="p-4">
       <div
-        class="p-4 justify-center md:p-8 max-w-3xl rounded-xl mx-auto bg-neutral"
+        class="p-4 gap-4 flex flex-col items-center md:p-8 max-w-3xl rounded-xl mx-auto bg-neutral"
       >
-        <form action="/auth/login" method="post">
+        <form class="w-full" action="/auth/login" method="post">
           <h1 class="text-3xl">Sign in</h1>
           <div class="form-control w-full">
             <label class="label">
@@ -44,11 +44,10 @@
             Sign in
           </button>
         </form>
-        <div class="mt-2">
+        <p class="text-xl">
           Don't have an account?
-          <a class="text-primary" href="/auth/signup">Sign Up </a>
-          here!!!.
-        </div>
+          <a class="text-primary" href="/auth/signup">Sign up</a>
+        </p>
       </div>
     </div>
     <%- include('partials/footer') %>

@@ -2,47 +2,50 @@
 <html>
   <head>
     <title>Profile</title>
-    <!-- Include Bootstrap CSS -->
-    <link
-      rel="stylesheet"
-      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
-    />
-    <link rel="stylesheet" href="/style/profile.css" />
+    <%- include('partials/header') %>
   </head>
   <body>
-    <div class="container">
-      <h1>Profile</h1>
-      <div class="row">
-        <div class="col-md-6">
-          <div class="form-group">
-            <label for="username">Username:</label>
-            <p><%= profileUser.username %></p>
+    <%- include('partials/navbar') %>
+    <div class="p-4 md:p-8">
+      <div class="max-w-3xl mx-auto min-w-[300px] p-4 bg-neutral">
+        <div class="flex flex-col gap-4 items-center">
+          <div class="avatar">
+            <div
+              class="w-24 h-24 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2"
+            >
+              <img src="/images/profile-pic-placeholder.png" />
+            </div>
           </div>
-          <div class="form-group">
-            <label for="email">Email:</label>
-            <p><%= profileUser.email %></p>
+          <h1 class="text-3xl font-bold"><%= user.username %></h1>
+          <h2 class="text-xl"><%= user.email %></h2>
+          <% if(user && profileUser._id.toString() === user._id.toString()) { %>
+          <div class="flex gap-4">
+            <a
+              href="/profile/<%= user._id %>/edit"
+              class="btn btn-primary btn-sm"
+            >
+              Edit Profile
+            </a>
+            <a href="/auth/logout" class="btn btn-error btn-sm">Logout</a>
           </div>
-          <% if(user && user.username !== profileUser.username) { %>
-            <% if(!isFriend) { %>
-              <form id="requestForm" method="POST" action="/friends/sendRequest">
-                <input type="hidden" name="friendUsername" value="<%= profileUser.username %>">
-                <button type="submit">Send Friend Request</button>
-              </form>
-            <% } else { %>
-              <div class="mt-5">
-                <a href="/chat/<%= profileUser.username %>" class="btn btn-primary">Chat</a>
-              </div>
-            <% } %>
+          <% } else if(isFriend) { %>
+          <a href="/chat/<%= profileUser._id %>" class="btn btn-primary btn-sm">
+            Send Message
+          </a>
+          <% } else { %>
+          <form method="post" action="/friends/sendRequest">
+            <input
+              name="username"
+              class="hidden"
+              value="<%= profileUser.username %>"
+            />
+            <button type="submit" class="btn btn-primary btn-md">
+              Send Request
+            </button>
+          </form>
           <% } %>
-          <div class="mt-5">
-            <a href="/" class="btn btn-primary">Back to Home</a>
-          </div>
         </div>
       </div>
     </div>
-
-    <!-- Include Bootstrap JS -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
   </body>
 </html>

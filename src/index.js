@@ -16,9 +16,16 @@ app.use(chatController)
 app.use(ajaxController)
 
 app.use((req, res, next) => {
-  res.status(404).render('error.ejs')
+  res
+    .status(404)
+    .render('error.ejs', { message: 'Page not found', status: 404 })
 })
 
 app.use((err, req, res, next) => {
-  res.status(500).render('error.ejs')
+  res
+    .status(500)
+    .render('error.ejs', {
+      message: err.message || 'Internal server error',
+      status: 500,
+    })
 })

@@ -8,27 +8,11 @@
   <body>
     <%- include('partials/navbar') %>
     <div class="p-4">
-      <div class="p-4 md:p-8 max-w-3xl rounded-xl mx-auto bg-neutral">
-        <form action="/auth/signup" method="post">
+      <div
+        class="p-4 gap-4 flex flex-col items-center md:p-8 max-w-3xl rounded-xl mx-auto bg-neutral"
+      >
+        <form class="w-full" action="/auth/signup" method="post">
           <h1 class="text-3xl">Sign Up</h1>
-          <div class="form-control w-full">
-            <label class="label">
-              <span class="label-text">Username</span>
-              <% if(message) {%>
-              <span id="statusMessage" class="label-text-alt text-error"
-                ><%= message%></span
-              >
-              <% } %>
-            </label>
-            <input
-              id="username"
-              name="username"
-              type="username"
-              placeholder="Username"
-              class="input input-bordered w-full"
-              required
-            />
-          </div>
           <div class="form-control w-full">
             <label class="label">
               <span class="label-text">Email</span>
@@ -75,13 +59,11 @@
             Sign Up
           </button>
         </form>
-        <div class="mt-4">
-          <span>
-            Already have an account?
-            <a class="text-primary" href="/auth/login">Sign In </a>
-            here!!!.
-          </span>
-        </div>
+        <p class="text-xl">
+          Already have an account?
+          <a class="text-primary" href="/auth/login">Sign In </a>
+          here!!!.
+        </p>
       </div>
     </div>
     <%- include('partials/footer') %>
